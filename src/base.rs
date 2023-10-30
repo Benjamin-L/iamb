@@ -1017,7 +1017,9 @@ impl ChatStore {
 
     /// Mark a room for loading more scrollback.
     pub fn mark_for_load(&mut self, room_id: OwnedRoomId) {
-        self.need_load.insert(room_id);
+        if self.need_load.insert(room_id) {
+            self.worker.notify_need_load();
+        }
     }
 
     /// Get the [RoomInfo] for a given room identifier.
